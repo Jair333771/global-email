@@ -2,7 +2,6 @@
 using Global.Email.Domain.Interfaces.UnitOfWork;
 using Global.Email.Infraestructure.Context;
 using Global.Email.Infraestructure.Repositories;
-using System;
 using System.Threading.Tasks;
 
 namespace Global.Email.Infraestructure.UnitOfWork

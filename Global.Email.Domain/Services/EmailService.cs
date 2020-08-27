@@ -3,8 +3,8 @@ using Global.Email.Domain.Interfaces.UnitOfWork;
 using Mandrill;
 using Mandrill.Models;
 using Mandrill.Requests.Messages;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Services
@@ -52,20 +52,27 @@ namespace Global.Email.Domain.Services
 
                 return result;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
         public async Task<List<EmailResult>> ValidateStatus(List<EmailResult> emailResult, Entities.Email email)
         {
-            foreach (var item in emailResult)
+            try
             {
-                email.Status = item.Status.ToString();
-                await Add(email);
+                foreach (var item in emailResult)
+                {
+                    email.Status = item.Status.ToString();
+                    await Add(email);
+                }
+                return emailResult;
             }
-            return emailResult;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task Add(Entities.Email email)
@@ -75,9 +82,9 @@ namespace Global.Email.Domain.Services
                 await _unitOfWork.EmailRepository.Add(email);
                 await _unitOfWork.SaveChangesAsync();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -88,9 +95,9 @@ namespace Global.Email.Domain.Services
                 var list = _unitOfWork.EmailRepository.GetAll();
                 return list;
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }

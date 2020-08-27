@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Global.Email.Domain.Entities;
+
 namespace Global.Email.Infraestructure.Context
 {
     public class AppDbContext : DbContext

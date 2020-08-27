@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Global.Email.Application.RequestModel;
-using System;
 
 namespace Global.Email.Infraestructure.Validations
 {

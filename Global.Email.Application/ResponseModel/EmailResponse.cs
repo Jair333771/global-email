@@ -1,5 +1,4 @@
 ﻿using Mandrill.Models;
-using System.Collections.Generic;
 
 namespace Global.Email.Application.ResponseModel
 {
