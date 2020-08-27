@@ -1,14 +1,14 @@
-﻿using Global.Email.Domain.Interfaces.Repositories;
+﻿using Global.Email.Domain.Entities;
+using Global.Email.Domain.Interfaces.Repositories;
+using System;
 using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Interfaces.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        IRepository<Entities.Email> EmailRepository { get; }
-        void Dispose();
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity;
         void SaveChanges();
-
         Task SaveChangesAsync();
     }
 }

@@ -21,10 +21,11 @@ namespace Global.Email.Api.Controllers
         protected readonly IEmailService _emailService;
         protected readonly IMapper _mapper;
 
-        public EmailController(IEmailService emailService, IMapper mapper)
+        public EmailController(IEmailService emailService, IMapper mapper, ILogger<EmailController> logger)
         {
             _emailService = emailService;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]

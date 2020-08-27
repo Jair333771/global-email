@@ -79,7 +79,7 @@ namespace Global.Email.Domain.Services
         {
             try
             {
-                await _unitOfWork.EmailRepository.Add(email);
+                await _unitOfWork.GetRepository<Entities.Email>().Add(email);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -93,11 +93,12 @@ namespace Global.Email.Domain.Services
         {
             try
             {
-                var list = _unitOfWork.EmailRepository.GetAll();
+                var list = _unitOfWork.GetRepository<Entities.Email>().GetAll();
                 return list;
             }
             catch (Exception ex)
             {
+                _unitOfWork.Dispose();
                 throw new Exception(ex.Message);
             }
         }
