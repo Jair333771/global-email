@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Global.Email.Domain.Interfaces.Repositories;
 using Global.Email.Domain.Interfaces.Services;
 using Global.Email.Domain.Interfaces.UnitOfWork;
@@ -37,7 +38,6 @@ namespace Global.Email.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<AppDbContext>(
                opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction: sqlOptions =>
@@ -51,7 +51,7 @@ namespace Global.Email.Api
             services.AddTransient<IEmailService, EmailService>();
             services.AddSingleton<IMandrillApi>(provider =>
             {
-                var apiKey = "FcaEmb2-9Lh456t9j6vM4Q";
+                var apiKey = Configuration["Mandrill:ApiKey"];
                 return new MandrillApi(apiKey);
             });
 
@@ -63,8 +63,14 @@ namespace Global.Email.Api
                 return new SendMessageRequest(new EmailMessage());
             });
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services
                 .AddControllers()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+                })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
