@@ -9,21 +9,21 @@ namespace Global.Email.Infraestructure.Validations
         public EmailValidator()
         {
             RuleFor(email => email.From)
-                .NotNull()
-                .NotEmpty()
-                .EmailAddress()
-                .WithMessage("El remitente del correo es requerido.");
+                .Matches(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$").WithMessage("El correo no es válido.")
+                .EmailAddress().WithMessage("El remitente no es válido.")
+                .NotNull().WithMessage("El remitente del correo es requerido.")
+                .NotEmpty().WithMessage("El remitente del correo no puede estar vacio.");
+
 
             RuleFor(email => email.To)
-                .NotNull()
-                .NotEmpty()
-                .EmailAddress()
-                .WithMessage("El destinatario del correo es requerido.");
+                .Matches(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$").WithMessage("El correo no es válido.")
+                .EmailAddress().WithMessage("El destinatario no es válido.")
+                .NotNull().WithMessage("El destinatario del correo es requerido.")
+                .NotEmpty().WithMessage("El destinatario no puede estar vacio.");
 
             RuleFor(email => email.Message)
-               .NotNull()
-               .NotEmpty()
-               .WithMessage("El mensaje es requerido.");
+                .NotNull().WithMessage("El mensaje es requerido.")
+                .NotEmpty().WithMessage("El mensaje no puede estar vacio.");
         }
     }
 }

@@ -9,6 +9,7 @@ using Global.Email.Domain.Interfaces.Services;
 using Global.Email.Domain.Interfaces.UnitOfWork;
 using Global.Email.Domain.Services;
 using Global.Email.Infraestructure.Context;
+using Global.Email.Infraestructure.Extensions;
 using Global.Email.Infraestructure.Repositories;
 using Global.Email.Infraestructure.UnitOfWork;
 using Mandrill;
@@ -38,44 +39,8 @@ namespace Global.Email.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            services.AddDbContext<AppDbContext>(
-               opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction: sqlOptions =>
-               {
-                   sqlOptions.EnableRetryOnFailure();
-               })
-            );
-
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddSingleton<IMandrillApi>(provider =>
-            {
-                var apiKey = Configuration["Mandrill:ApiKey"];
-                return new MandrillApi(apiKey);
-            });
-
-            services.AddTransient<EmailAddress, EmailAddress>();
-            services.AddTransient<EmailMessage, EmailMessage>();
-            services.AddTransient<List<EmailAddress>, List<EmailAddress>>();
-            services.AddTransient(provider =>
-            {
-                return new SendMessageRequest(new EmailMessage());
-            });
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services
-                .AddControllers()
-                .AddFluentValidation(options =>
-                {
-                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-                })
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                });
+            services.AddDbContexts(Configuration);
+            services.AddServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
