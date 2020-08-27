@@ -1,29 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using FluentValidation.AspNetCore;
-using Global.Email.Domain.Interfaces.Repositories;
-using Global.Email.Domain.Interfaces.Services;
-using Global.Email.Domain.Interfaces.UnitOfWork;
-using Global.Email.Domain.Services;
-using Global.Email.Infraestructure.Context;
 using Global.Email.Infraestructure.Extensions;
-using Global.Email.Infraestructure.Repositories;
-using Global.Email.Infraestructure.UnitOfWork;
-using Mandrill;
-using Mandrill.Models;
-using Mandrill.Requests.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Global.Email.Api
 {

@@ -14,6 +14,9 @@ namespace Global.Email.Infraestructure.Mappings
 
             CreateMap<EmailResponse, EmailResult>();
             CreateMap<EmailResult, EmailResponse>();
+
+            CreateMap<EmailResponse, Domain.Entities.Email>();
+            CreateMap<Domain.Entities.Email, EmailResponse>();
         }
     }
 }

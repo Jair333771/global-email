@@ -84,6 +84,7 @@ namespace Global.Email.Domain.Services
             }
             catch (Exception ex)
             {
+                _unitOfWork.Dispose();
                 throw new Exception(ex.Message);
             }
         }
