@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Global.Email.Application.DTOs;
 using Global.Email.Application.RequestModel;
 using Global.Email.Application.ResponseModel;
 using Mandrill.Models;
@@ -15,8 +16,8 @@ namespace Global.Email.Infraestructure.Mappings
             CreateMap<EmailResponse, EmailResult>();
             CreateMap<EmailResult, EmailResponse>();
 
-            CreateMap<EmailResponse, Domain.Entities.Email>();
-            CreateMap<Domain.Entities.Email, EmailResponse>();
+            CreateMap<EmailDto, Domain.Entities.Email>();
+            CreateMap<Domain.Entities.Email, EmailDto>();
         }
     }
 }

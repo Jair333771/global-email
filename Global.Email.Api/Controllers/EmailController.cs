@@ -4,6 +4,7 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
+using Global.Email.Application.DTOs;
 using Global.Email.Application.RequestModel;
 using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Interfaces.Services;
@@ -29,7 +30,7 @@ namespace Global.Email.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<EmailResponse>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<EmailDto>))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Get()
@@ -37,7 +38,7 @@ namespace Global.Email.Api.Controllers
             try
             {
                 var response = _emailService.GetAll();
-                var emailResponse = _mapper.Map<List<EmailResponse>>(response);
+                var emailResponse = _mapper.Map<IEnumerable<EmailDto>>(response);
                 return Ok(emailResponse);
             }
             catch (Exception ex)

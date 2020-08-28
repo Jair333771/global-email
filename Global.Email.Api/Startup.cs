@@ -20,6 +20,7 @@ namespace Global.Email.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContexts(Configuration);
+            services.AddSwaggerDoc();
             services.AddServices(Configuration);
         }
 
@@ -32,6 +33,14 @@ namespace Global.Email.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Email Transactions v1");
+                options.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 

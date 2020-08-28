@@ -12,6 +12,7 @@ using Mandrill.Requests.Messages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 
@@ -24,7 +25,19 @@ namespace Global.Email.Infraestructure.Extensions
             services.AddDbContext<AppDbContext>(options =>
                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
             );
+            return services;
+        }
 
+        public static IServiceCollection AddSwaggerDoc(this IServiceCollection services) {
+            services.AddSwaggerGen(doc =>
+            {
+                doc.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Email Transactions",
+                    Version = "v1",
+                    Description = "Email Transactions Microservice"
+                });
+            });
             return services;
         }
 
