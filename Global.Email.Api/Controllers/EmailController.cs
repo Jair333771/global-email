@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 namespace Global.Email.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     [DataContract]
     public class EmailController : ControllerBase
@@ -29,6 +30,10 @@ namespace Global.Email.Api.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get All Email Transactions.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<EmailDto>))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -48,6 +53,11 @@ namespace Global.Email.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Send and Save email on DB
+        /// </summary>
+        /// <param name="emailRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(List<EmailResponse>))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]

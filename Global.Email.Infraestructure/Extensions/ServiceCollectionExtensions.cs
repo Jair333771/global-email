@@ -15,6 +15,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Global.Email.Infraestructure.Extensions
 {
@@ -37,8 +40,18 @@ namespace Global.Email.Infraestructure.Extensions
                     Version = "v1",
                     Description = "Email Transactions Microservice"
                 });
+
+                var assembly = GetAssemblyByName("Global.Email.Api");
+                var xmlFile = $"{assembly.GetName().Name}.xml";
+                var xmlRoute = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                doc.IncludeXmlComments(xmlRoute);
             });
             return services;
+        }
+        public static Assembly GetAssemblyByName(string name)
+        {
+            return AppDomain.CurrentDomain.GetAssemblies().
+                   FirstOrDefault(assembly => assembly.GetName().Name == name);
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
