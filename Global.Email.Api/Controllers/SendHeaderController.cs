@@ -9,11 +9,13 @@ using Global.Email.Application.RequestModel;
 using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Global.Email.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [Produces("application/json")]
     [ApiController]

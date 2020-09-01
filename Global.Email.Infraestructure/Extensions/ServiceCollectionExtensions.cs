@@ -10,15 +10,18 @@ using Global.Email.Infraestructure.Repositories;
 using Mandrill;
 using Mandrill.Models;
 using Mandrill.Requests.Messages;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Global.Email.Infraestructure.Extensions
 {
@@ -89,6 +92,29 @@ namespace Global.Email.Infraestructure.Extensions
 
             services.AddMvc();
 
+            return services;
+        }
+
+        public static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = configuration.GetValue<string>("Authentication:Issuer"),
+                     ValidAudience = configuration.GetValue<string>("Authentication:Audience"),
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("Authentication:SecretKey")))
+                 };
+
+            });
             return services;
         }
     }
