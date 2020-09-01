@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
+using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Repositories;
 using Global.Email.Domain.Interfaces.Services;
 using Global.Email.Domain.Interfaces.UnitOfWork;
@@ -58,7 +59,11 @@ namespace Global.Email.Infraestructure.Extensions
         {
             services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();
+            services.AddTransient<ISendHeaderDetailService<SendHeaderDetail>, SendHeaderDetailService>();
+
             services.AddSingleton<IMandrillApi>(provider =>
             {
                 var apiKey = configuration.GetValue<string>("Mandrill:ApiKey");
@@ -81,6 +86,8 @@ namespace Global.Email.Infraestructure.Extensions
                 {
                     options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
                 });
+
+            services.AddMvc();
 
             return services;
         }
