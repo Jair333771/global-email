@@ -18,11 +18,11 @@ namespace Global.Email.Api.Controllers
     public class NetCoreUserController : ControllerBase
     {
         private readonly ILogger<SendHeaderController> _logger;
-        private readonly IUserService<NetCoreUser> _userService;
+        private readonly INetCoreUserService<NetCoreUser> _userService;
         private readonly IMapper _mapper;
         private readonly IPasswordService _passwordService;
 
-        public NetCoreUserController(IUserService<NetCoreUser> userService, IMapper mapper, IPasswordService passwordService, ILogger<SendHeaderController> logger)
+        public NetCoreUserController(INetCoreUserService<NetCoreUser> userService, IMapper mapper, IPasswordService passwordService, ILogger<SendHeaderController> logger)
         {
             _passwordService = passwordService;
             _userService = userService;

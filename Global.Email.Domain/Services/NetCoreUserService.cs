@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Services
 {
-    public class UserService : IUserService<NetCoreUser>
+    public class NetCoreUserService : INetCoreUserService<NetCoreUser>
     {
         private readonly IUserRepository _userRepo;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IUnitOfWork unitOfWork, IUserRepository userRepo)
+        public NetCoreUserService(IUnitOfWork unitOfWork, IUserRepository userRepo)
         {
             _unitOfWork = unitOfWork;
             _userRepo = userRepo;

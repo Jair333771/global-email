@@ -76,7 +76,7 @@ namespace Global.Email.Infraestructure.Extensions
 
             services.AddTransient<ISendHeaderDetailService<SendHeaderDetail>, SendHeaderDetailService>();
             services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();
-            services.AddTransient<IUserService<NetCoreUser>, UserService>();
+            services.AddTransient<INetCoreUserService<NetCoreUser>, NetCoreUserService>();
             services.AddTransient<IPasswordService, PasswordService>();
             services.AddTransient<IEmailService, EmailService>();
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Interfaces.Services
 {
-    public interface IUserService<T> where T : class
+    public interface INetCoreUserService<T> where T : class
     {
         IEnumerable<T> GetAll();
         Task<T> GetById(int id);

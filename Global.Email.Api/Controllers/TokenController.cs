@@ -20,11 +20,11 @@ namespace Global.Email.Api.Controllers
     {
         private readonly ILogger<TokenController> _logger;
         private readonly IConfiguration _configuration;
-        protected readonly IUserService<NetCoreUser> _userService;
+        protected readonly INetCoreUserService<NetCoreUser> _userService;
         protected readonly IPasswordService _passwordService;
         protected readonly IMapper _mapper;
 
-        public TokenController(IConfiguration configuration, IPasswordService passwordService, IUserService<NetCoreUser> userService, IMapper mapper, ILogger<TokenController> logger)
+        public TokenController(IConfiguration configuration, IPasswordService passwordService, INetCoreUserService<NetCoreUser> userService, IMapper mapper, ILogger<TokenController> logger)
         {
             _configuration = configuration;
             _passwordService = passwordService;
