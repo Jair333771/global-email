@@ -42,8 +42,8 @@ namespace Global.Email.Domain.Entities
         public int? SnComplete { get; set; }
         [Column("creation_date")]
         public DateTime? CreationDate { get; set; }
-        [Column("sn_int_process")]
-        public int? SnIntProcess { get; set; }
+        [Column("sn_in_process")]
+        public int? SnInProcess { get; set; }
         [Column("scheduling_date")]
         public DateTime? SchedulingDate { get; set; }
         [Column("sn_massive")]

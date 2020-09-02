@@ -4,23 +4,24 @@ namespace Global.Email.Application.DTOs
 {
     public class SendHeaderDto
     {
-        public int? Application_id { get; set; }
-        public int? Sub_application_id { get; set; }
-        public string By_name { get; set; }
-        public string By_email { get; set; }
-        public string Desc_subject { get; set; }
-        public DateTime? Send_date { get; set; }
-        public string Send_user { get; set; }
-        public string For_mail { get; set; }
-        public string For_mail_Cc { get; set; }
-        public string For_mail_Bcc { get; set; }
-        public int? Process_id { get; set; }
-        public int? Sub_process_id { get; set; }
-        public int? Template_id { get; set; }
-        public int? Sn_complete { get; set; }
-        public DateTime? Creation_date { get; set; }
-        public int? Sn_int_process { get; set; }
-        public DateTime? Scheduling_date { get; set; }
-        public bool? Sn_massive { get; set; }
+        public int Id { get; set; }        
+        public int? ApplicationId { get; set; }
+        public int? SubApplicationId { get; set; }
+        public string ByName { get; set; }
+        public string ByEmail { get; set; }
+        public string DescSubject { get; set; }
+        public DateTime? SendDate { get; set; }
+        public string SendUser { get; set; }
+        public string ForMail { get; set; }
+        public string ForMailCc { get; set; }
+        public string ForMailBcc { get; set; }
+        public int? ProcessId { get; set; }
+        public int? SubProcessId { get; set; }
+        public int? TemplateId { get; set; }
+        public int? SnComplete { get; set; }
+        public DateTime? CreationDate { get; set; }
+        public int? SnInProcess { get; set; }
+        public DateTime? SchedulingDate { get; set; }
+        public bool? SnMassive { get; set; }
     }
 }

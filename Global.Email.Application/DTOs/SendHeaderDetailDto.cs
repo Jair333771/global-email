@@ -17,7 +17,7 @@ namespace Global.Email.Application.DTOs
         public int? PvCeroId { get; set; }
         public DateTime? CreationDate { get; set; }
         public int? DetailId { get; set; }
-        public int? SnInProceso { get; set; }
+        public int? SnInProcess { get; set; }
         public int? PqCode { get; set; }
         public int? AvanceCode { get; set; }
         public int? NumberOperations { get; set; }

@@ -41,11 +41,11 @@ namespace Global.Email.Api.Controllers
         public async Task<IActionResult> Post([FromBody] SendHeaderDetailRequest emailRequest)
         {
             try
-            {
+            {   
                 var email = _mapper.Map<SendHeaderDetail>(emailRequest);
                 var result = await _sendHeaderDetailService.Add(email);
                 var emailResponse = _mapper.Map<SendHeaderDetailResponse>(emailRequest);
-                return Ok(emailResponse);
+                return StatusCode(result, emailResponse);
             }
             catch (Exception ex)
             {
@@ -54,4 +54,4 @@ namespace Global.Email.Api.Controllers
             }
         }
     }
-}
+}   

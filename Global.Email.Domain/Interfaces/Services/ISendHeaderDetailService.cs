@@ -1,15 +1,14 @@
-﻿using Global.Email.Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Interfaces.Services
 {
-    public interface ISendHeaderDetailService<T> where T : class
+    public interface ISendHeaderDetailService<T>
     {
         IEnumerable<T> GetAll();
         Task<T> GetById(int id);
         Task<int> Add(T entity);
-        int Update(T entity);
+        Task<int> Update(T entity);
         Task Delete(int id);
     }
 }

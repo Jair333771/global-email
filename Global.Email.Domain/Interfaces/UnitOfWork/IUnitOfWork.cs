@@ -8,7 +8,7 @@ namespace Global.Email.Domain.Interfaces.UnitOfWork
     public interface IUnitOfWork : IDisposable
     {
         IRepository<TEntity> GetRepository<TEntity>() where TEntity : BaseEntity;
-        void SaveChanges();
-        Task SaveChangesAsync();
+        int SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

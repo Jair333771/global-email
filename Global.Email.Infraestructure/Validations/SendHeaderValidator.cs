@@ -72,7 +72,7 @@ namespace Global.Email.Infraestructure.Validations
 
             RuleFor(x => x.CreationDate);
 
-            RuleFor(x => x.SnIntProcess);
+            RuleFor(x => x.SnInProcess);
 
             RuleFor(x => x.SchedulingDate);
 

@@ -11,15 +11,27 @@ namespace Global.Email.Infraestructure.Mappings
     {
         public AutomapperEmail()
         {
+            User();
             Email();
             SendHeader();
             SendHeaderDetail();
         }
 
+        public void User()
+        {
+            CreateMap<UserLoginRequest, NetCoreUser>();
+            CreateMap<NetCoreUser, UserLoginRequest>();
+
+            CreateMap<NetCoreUserDto, NetCoreUser>();
+            CreateMap<NetCoreUser, NetCoreUserDto>();
+        }
         public void Email() 
         {
             CreateMap<EmailRequest, Domain.Entities.Email>();
             CreateMap<Domain.Entities.Email, EmailRequest>();
+
+            CreateMap<EmailResponse, Domain.Entities.Email>();
+            CreateMap<Domain.Entities.Email, EmailResponse>();
 
             CreateMap<EmailResponse, EmailResult>();
             CreateMap<EmailResult, EmailResponse>();
@@ -27,7 +39,6 @@ namespace Global.Email.Infraestructure.Mappings
             CreateMap<EmailDto, Domain.Entities.Email>();
             CreateMap<Domain.Entities.Email, EmailDto>();
         }
-
         public void SendHeader()
         {
             CreateMap<SendHeader, SendHeaderDto>();
@@ -39,7 +50,6 @@ namespace Global.Email.Infraestructure.Mappings
             CreateMap<SendHeaderRequest, SendHeaderResponse>();
             CreateMap<SendHeaderResponse, SendHeaderRequest>();
         }
-
         public void SendHeaderDetail()
         {
             CreateMap<SendHeaderDetail, SendHeaderDetailRequest>();

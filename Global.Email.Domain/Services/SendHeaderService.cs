@@ -20,14 +20,14 @@ namespace Global.Email.Domain.Services
         public async Task<int> Add(SendHeader entity)
         {
             await _unitOfWork.GetRepository<SendHeader>().Add(entity);
-            await _unitOfWork.SaveChangesAsync();
+            var result = await _unitOfWork.SaveChangesAsync();
             return 201;
         }
 
         public async Task Delete(int id)
         {
             await _unitOfWork.GetRepository<SendHeader>().Delete(id);
-            await _unitOfWork.SaveChangesAsync();
+            var result = await _unitOfWork.SaveChangesAsync();
         }
 
         public IEnumerable<SendHeader> GetAll()
@@ -38,21 +38,14 @@ namespace Global.Email.Domain.Services
 
         public async Task<SendHeader> GetById(int id)
         {
-            try
-            {
-                var entity = await _unitOfWork.GetRepository<SendHeader>().GetById(id);
-                return entity;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var entity = await _unitOfWork.GetRepository<SendHeader>().GetById(id);
+            return entity;
         }
 
-        public int Update(SendHeader entity)
+        public async Task<int> Update(SendHeader entity)
         {
             _unitOfWork.GetRepository<SendHeader>().Update(entity);
-            _unitOfWork.SaveChangesAsync();
+            var result = await _unitOfWork.SaveChangesAsync();
             return 304;
         }
     }

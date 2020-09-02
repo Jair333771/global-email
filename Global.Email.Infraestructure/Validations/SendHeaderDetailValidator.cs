@@ -1,16 +1,18 @@
 ﻿using FluentValidation;
-using Global.Email.Domain.Entities;
+using Global.Email.Application.RequestModel;
 
 namespace Global.Email.Infraestructure.Validations
 {
-    class SendHeaderDetailValidator : BaseValidator<SendHeaderDetail>
-    {
+    class SendHeaderDetailValidator : BaseValidator<SendHeaderDetailRequest>
+    {   
         public SendHeaderDetailValidator()
         {
-            RuleFor(X => X.SendHeaderId)
-                .GreaterThan(0).WithMessage("El id no es válido.");
+            RuleFor(x => x.SendHeaderId)
+                .GreaterThan(0)
+                .WithMessage("El sendHeaderId es requerido.");
 
             RuleFor(X => X.ApiId)
+                .NotEmpty().WithMessage("El api id es requerido.")
                 .NotNull().WithMessage("El api id es requerido.");
 
             RuleFor(X => X.FromEmail)
@@ -31,36 +33,41 @@ namespace Global.Email.Infraestructure.Validations
             RuleFor(X => X.DetailState);
 
             RuleFor(X => X.DestinationTypeId)
-                .NotNull().WithMessage("El valor de destinación es válido.")
-                .GreaterThan(0).WithMessage("El id no es válido.");
+                .GreaterThan(x => x.DestinationTypeId.GetValueOrDefault())
+                .When(x => x.DestinationTypeId.HasValue)
+                .OverridePropertyName("DestinationTypeId").WithMessage("El id no es válido.");
 
             RuleFor(X => X.PersonId)
-                .NotNull().WithMessage("El id de persona es requerido.")
-                .GreaterThan(0).WithMessage("El id no es válido.");
+                .GreaterThan(x => x.PersonId.GetValueOrDefault())
+                .When(x => x.PersonId.HasValue)
+                .OverridePropertyName("PersonId").WithMessage("El id no es válido.");
 
             RuleFor(X => X.PvCeroId)
-                .NotNull().WithMessage("El pv cero id es requerido.")
-                .GreaterThan(0).WithMessage("El pv cero id no es válido.");
-
-            RuleFor(X => X.CreationDate);
+                .GreaterThan(x => x.PvCeroId.GetValueOrDefault())
+                .When(x => x.PvCeroId.HasValue)
+                .OverridePropertyName("PvCeroId").WithMessage("El pv cero id no es válido.");
 
             RuleFor(X => X.DetailId)
-                .NotNull().WithMessage("El id de detalle es requerido.")
-                .GreaterThan(0).WithMessage("El id de detalle no es válido.");
+                .GreaterThan(x => x.DetailId.GetValueOrDefault())
+                .When(x => x.DetailId.HasValue)
+                .OverridePropertyName("DetailId").WithMessage("El id de detalle no es válido.");
 
-            RuleFor(X => X.SnInProceso);
+            RuleFor(X => X.SnInProcess);
 
             RuleFor(X => X.PqCode)
-               .NotNull().WithMessage("El codigo pq es requerido.")
-               .GreaterThan(0).WithMessage("El  codigo pq no es válido.");
+                .GreaterThan(x => x.PqCode.GetValueOrDefault())
+                .When(x => x.PqCode.HasValue)
+                .OverridePropertyName("PqCode").WithMessage("El  codigo pq no es válido.");
 
             RuleFor(X => X.AvanceCode)
-              .NotNull().WithMessage("El codigo pq es requerido.")
-              .GreaterThan(0).WithMessage("El  codigo pq no es válido.");
+                .GreaterThan(x => x.AvanceCode.GetValueOrDefault())
+                .When(x => x.AvanceCode.HasValue)
+                .OverridePropertyName("AvanceCode").WithMessage("El  codigo pq no es válido.");
 
             RuleFor(X => X.NumberOperations)
-              .NotNull().WithMessage("El número de operaciones es requerido.")
-              .GreaterThan(0).WithMessage("El  codigo pq no es válido.");
+                .GreaterThan(x => x.NumberOperations.GetValueOrDefault())
+                .When(x => x.NumberOperations.HasValue)
+                .OverridePropertyName("NumberOperations").WithMessage("El  codigo pq no es válido.");
         }
     }
 }

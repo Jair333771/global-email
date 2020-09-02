@@ -19,7 +19,7 @@ namespace Global.Email.Application.RequestModel
         public int? TemplateId { get; set; }
         public int? SnComplete { get; set; }
         public DateTime? CreationDate => DateTime.Now;
-        public int? SnIntProcess { get; set; }
+        public int? SnInProcess { get; set; }
         public DateTime? SchedulingDate { get; set; }
         public bool? SnMassive { get; set; }
     }

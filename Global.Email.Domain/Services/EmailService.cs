@@ -80,7 +80,7 @@ namespace Global.Email.Domain.Services
             try
             {
                 await _unitOfWork.GetRepository<Entities.Email>().Add(email);
-                await _unitOfWork.SaveChangesAsync();
+                var result = await _unitOfWork.SaveChangesAsync();
             }
             catch (Exception ex)
             {

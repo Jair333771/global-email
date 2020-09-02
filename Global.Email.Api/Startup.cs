@@ -21,6 +21,7 @@ namespace Global.Email.Api
         {
             services.AddDbContexts(Configuration);
             services.AddSwaggerDoc();
+            services.AddOptions(Configuration);
             services.AddServices(Configuration);
             services.AddJwt(Configuration);
         }
@@ -45,7 +46,8 @@ namespace Global.Email.Api
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

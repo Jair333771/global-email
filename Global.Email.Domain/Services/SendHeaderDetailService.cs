@@ -22,16 +22,18 @@ namespace Global.Email.Domain.Services
                 return 400;
 
             await _unitOfWork.GetRepository<SendHeaderDetail>().Add(entity);
-            await _unitOfWork.SaveChangesAsync();
+            var result = await _unitOfWork.SaveChangesAsync();
 
-            return 201;
+            if(result > 0)
+                return 201;
+            else
+                return 400;
         }
 
         public async Task Delete(int id)
         {
             await _unitOfWork.GetRepository<SendHeaderDetail>().Delete(id);
-            await _unitOfWork.SaveChangesAsync();
-
+            var result = await _unitOfWork.SaveChangesAsync();
         }
 
         public IEnumerable<SendHeaderDetail> GetAll()
@@ -46,11 +48,11 @@ namespace Global.Email.Domain.Services
             return entity;
         }
 
-        public int Update(SendHeaderDetail entity)
+        public async Task<int> Update(SendHeaderDetail entity)
         {
             _unitOfWork.GetRepository<SendHeaderDetail>().Update(entity);
-            _unitOfWork.SaveChangesAsync();
-            return 304;
+            var result = await _unitOfWork.SaveChangesAsync();
+            return result;
         }
     }
 }

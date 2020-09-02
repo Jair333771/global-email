@@ -10,13 +10,11 @@ namespace Global.Email.Infraestructure.Context
         public DbSet<Domain.Entities.Email> Email { get; set; }
         public DbSet<SendHeader> SendHeader { get; set; }
         public DbSet<SendHeaderDetail> SendHeaderDetail { get; set; }
+        public DbSet<NetCoreUser> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            modelBuilder.Entity<SendHeaderDetail>().HasKey(x => x.Id);
-            modelBuilder.Entity<SendHeader>().HasKey(x => x.Id);
         }
     }
 }

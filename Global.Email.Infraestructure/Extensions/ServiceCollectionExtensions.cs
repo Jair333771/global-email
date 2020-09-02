@@ -6,7 +6,9 @@ using Global.Email.Domain.Interfaces.Services;
 using Global.Email.Domain.Interfaces.UnitOfWork;
 using Global.Email.Domain.Services;
 using Global.Email.Infraestructure.Context;
+using Global.Email.Infraestructure.Options;
 using Global.Email.Infraestructure.Repositories;
+using Global.Email.Infraestructure.Services;
 using Mandrill;
 using Mandrill.Models;
 using Mandrill.Requests.Messages;
@@ -35,6 +37,13 @@ namespace Global.Email.Infraestructure.Extensions
             return services;
         }
 
+        public static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<PasswordOptions>(options => configuration.GetSection("PasswordOptions").Bind(options));
+
+            return services;
+        }
+
         public static IServiceCollection AddSwaggerDoc(this IServiceCollection services) {
             services.AddSwaggerGen(doc =>
             {
@@ -52,6 +61,7 @@ namespace Global.Email.Infraestructure.Extensions
             });
             return services;
         }
+
         public static Assembly GetAssemblyByName(string name)
         {
             return AppDomain.CurrentDomain.GetAssemblies().
@@ -60,12 +70,15 @@ namespace Global.Email.Infraestructure.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
+            services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();
             services.AddTransient<ISendHeaderDetailService<SendHeaderDetail>, SendHeaderDetailService>();
+            services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();
+            services.AddTransient<IUserService<NetCoreUser>, UserService>();
+            services.AddTransient<IPasswordService, PasswordService>();
+            services.AddTransient<IEmailService, EmailService>();
 
             services.AddSingleton<IMandrillApi>(provider =>
             {
