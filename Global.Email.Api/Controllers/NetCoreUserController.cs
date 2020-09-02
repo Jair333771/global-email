@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using Global.Email.Application.DTOs;
+using Global.Email.Application.Enumerations;
+using Global.Email.Application.Interface;
 using Global.Email.Domain.Entities;
-using Global.Email.Domain.Enumerations;
 using Global.Email.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,22 +14,16 @@ using Microsoft.Extensions.Logging;
 namespace Global.Email.Api.Controllers
 {
     [Authorize(Roles = nameof(RoleType.Administrator))]
-    [Produces("application/json")]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class NetCoreUserController : ControllerBase
+    public class NetCoreUserController : BaseController
     {
-        private readonly ILogger<SendHeaderController> _logger;
         private readonly INetCoreUserService<NetCoreUser> _userService;
-        private readonly IMapper _mapper;
         private readonly IPasswordService _passwordService;
 
-        public NetCoreUserController(INetCoreUserService<NetCoreUser> userService, IMapper mapper, IPasswordService passwordService, ILogger<SendHeaderController> logger)
+        public NetCoreUserController(INetCoreUserService<NetCoreUser> userService, IMapper mapper, IPasswordService passwordService, ILogger<BaseController> logger)
+            :base(mapper, logger)
         {
             _passwordService = passwordService;
             _userService = userService;
-            _mapper = mapper;
-            _logger = logger;
         }
 
         /// <summary>
@@ -36,17 +32,17 @@ namespace Global.Email.Api.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(IGlobalResponse))]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Post(NetCoreUserDto request)
         {
             try
             {
                 var user = _mapper.Map<NetCoreUser>(request);
-
                 user.Password = _passwordService.Hash(user.Password);
                 var result = await _userService.Add(user);
-
-                request = _mapper.Map<NetCoreUserDto>(user);
-                return Ok(request);
+                return StatusCode(result.Status, result);
             }
             catch (Exception ex)
             {

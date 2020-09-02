@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Global.Email.Application.ResponseModel
+﻿namespace Global.Email.Application.ResponseModel
 {
     public class SendHeaderResponse
     {
+        public int id { get; set; }
         public string ByName { get; set; }
         public string ByEmail { get; set; }
         public int? SnComplete { get; set; }

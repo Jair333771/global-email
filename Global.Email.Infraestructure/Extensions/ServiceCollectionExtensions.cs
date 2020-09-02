@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation.AspNetCore;
+using Global.Email.Application.Interface;
+using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Repositories;
 using Global.Email.Domain.Interfaces.Services;
@@ -73,6 +75,8 @@ namespace Global.Email.Infraestructure.Extensions
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork.UnitOfWork>();
             services.AddTransient<IUserRepository, UserRepository>();
+
+            services.AddTransient<IGlobalResponse, GlobalResponse>();
 
             services.AddTransient<ISendHeaderDetailService<SendHeaderDetail>, SendHeaderDetailService>();
             services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();

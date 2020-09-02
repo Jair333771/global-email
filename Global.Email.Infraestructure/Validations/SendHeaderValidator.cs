@@ -22,8 +22,7 @@ namespace Global.Email.Infraestructure.Validations
                 .NotNull().WithMessage("El nombre es requerido.");
 
             RuleFor(x => x.ByEmail)
-                .Matches(EmailRegex)
-                .WithMessage("El correo remitente no es válido.")
+                .Matches(EmailRegex).WithMessage("El correo remitente no es válido.")
                 .EmailAddress().WithMessage("El remitente no es válido.")
                 .NotNull().WithMessage("El remitente del correo es requerido.")
                 .NotEmpty().WithMessage("El remitente del correo no puede estar vacio.");
@@ -37,8 +36,7 @@ namespace Global.Email.Infraestructure.Validations
                 .NotNull().WithMessage("El usuario es requerido.");
 
             RuleFor(x => x.ForMail)
-                .Matches(EmailRegex)
-                .WithMessage("El correo destinatario no es válido.")
+                .Matches(EmailRegex).WithMessage("El correo destinatario no es válido.")
                 .EmailAddress().WithMessage("El destinatario no es válido.")
                 .NotNull().WithMessage("El destinatario del correo es requerido.")
                 .NotEmpty().WithMessage("El destinatario del correo no puede estar vacio.");

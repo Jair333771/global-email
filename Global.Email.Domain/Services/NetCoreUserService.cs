@@ -1,10 +1,12 @@
-﻿using Global.Email.Domain.Entities;
+﻿using AutoMapper;
+using Global.Email.Application.DTOs;
+using Global.Email.Application.Interface;
+using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Repositories;
 using Global.Email.Domain.Interfaces.Services;
 using Global.Email.Domain.Interfaces.UnitOfWork;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Services
@@ -13,56 +15,110 @@ namespace Global.Email.Domain.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly IUnitOfWork _unitOfWork;
+        protected readonly IGlobalResponse _globalResponse;
+        protected readonly IMapper _mapper;
 
-        public NetCoreUserService(IUnitOfWork unitOfWork, IUserRepository userRepo)
+        public NetCoreUserService(IUnitOfWork unitOfWork, IGlobalResponse globalResponse, IMapper mapper, IUserRepository userRepo)
         {
             _unitOfWork = unitOfWork;
+            _globalResponse = globalResponse;
+            _mapper = mapper;
             _userRepo = userRepo;
         }
 
-        public async Task<int> Add(NetCoreUser entity)
+        public async Task<IGlobalResponse> Add(NetCoreUser entity)
         {
             await _unitOfWork.GetRepository<NetCoreUser>().Add(entity);
             var result = await _unitOfWork.SaveChangesAsync();
 
             if (result > 0)
-                return 201;
+            {
+                var model = _mapper.Map<NetCoreUserDto>(entity);
+                _globalResponse.Status = 201;
+                _globalResponse.Data = model;
+            }
             else
-                return 400;
+            {
+                _globalResponse.Status = 400;
+                _globalResponse.Data = "El registro no ha sido creado, por favor verifica la información";
+            }
+
+            return _globalResponse;
         }
 
-        public async Task Delete(int id)
+        public async Task<IGlobalResponse> Delete(int id)
         {
             await _unitOfWork.GetRepository<NetCoreUser>().Delete(id);
             var result = await _unitOfWork.SaveChangesAsync();
-        }
-
-        public IEnumerable<NetCoreUser> GetAll()
-        {
-            return _unitOfWork.GetRepository<NetCoreUser>().GetAll();
-        }
-
-        public async Task<NetCoreUser> GetById(int id)
-        {
-            return await _unitOfWork.GetRepository<NetCoreUser>().GetById(id);
-        }
-
-        public async Task<int> Update(NetCoreUser entity)
-        {
-            _unitOfWork.GetRepository<NetCoreUser>().Update(entity);
-            var result = await _unitOfWork.SaveChangesAsync();
 
             if (result > 0)
-                return 200;
+            {
+                _globalResponse.Status = 200;
+                _globalResponse.Data = "Registro eliminado exitosamente.";
+            }
             else
-                return 304;
+            {
+                _globalResponse.Status = 404;
+                _globalResponse.Data = "El registro no ha sido eliminado, por favor verifica la información";
+                return _globalResponse;
+            }
+
+            return _globalResponse;
+        }
+
+        public IGlobalResponse GetAll()
+        {
+            var result = _unitOfWork.GetRepository<NetCoreUser>().GetAll();
+
+            if (result.Count() > 0)
+            {
+                var model = _mapper.Map<IEnumerable<NetCoreUserDto>>(result);
+                _globalResponse.Status = 201;
+                _globalResponse.Data = model;
+            }
+            else
+                _globalResponse.Status = 204;
+
+            return _globalResponse;
+        }
+
+        public async Task<IGlobalResponse> GetById(int id)
+        {
+            var result = await _unitOfWork.GetRepository<NetCoreUser>().GetById(id);
+
+            if (result != null)
+            {
+                var model = _mapper.Map<NetCoreUserDto>(result);
+                _globalResponse.Status = 200;
+                _globalResponse.Data = model;
+            }
+            else
+                _globalResponse.Status = 204;
+
+            return _globalResponse;
         }
 
         public async Task<(bool, NetCoreUser)> GetByUser(NetCoreUser entity)
         {
             var result = await _userRepo.GetByUser(entity.User);
-            var exist = result != null;
-            return (exist, result);
+            return (result != null, result);
+        }
+
+        public async Task<IGlobalResponse> Update(NetCoreUser entity)
+        {
+            _unitOfWork.GetRepository<NetCoreUser>().Update(entity);
+            var result = await _unitOfWork.SaveChangesAsync();
+
+            if (result > 0)
+            {
+                var model = _mapper.Map<NetCoreUserDto>(result);
+                _globalResponse.Status = 200;
+                _globalResponse.Data = model;
+            }
+            else
+                _globalResponse.Status = 400;
+
+            return _globalResponse;
         }
     }
 }

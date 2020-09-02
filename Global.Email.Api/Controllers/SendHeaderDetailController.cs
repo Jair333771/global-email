@@ -3,30 +3,26 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
+using Global.Email.Application.Interface;
 using Global.Email.Application.RequestModel;
 using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Global.Email.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [Produces("application/json")]
-    [ApiController]
-    [DataContract]
-    public class SendHeaderDetailController : ControllerBase
+    [Authorize]
+    public class SendHeaderDetailController : BaseController
     {
-        private readonly ILogger<SendHeaderController> _logger;
         protected readonly ISendHeaderDetailService<SendHeaderDetail> _sendHeaderDetailService;
-        protected readonly IMapper _mapper;
 
-        public SendHeaderDetailController(ISendHeaderDetailService<SendHeaderDetail> sendHeaderDetailService, IMapper mapper, ILogger<SendHeaderController> logger)
+        public SendHeaderDetailController(ISendHeaderDetailService<SendHeaderDetail> sendHeaderDetailService, IMapper mapper, ILogger<BaseController> logger)
+        : base(mapper, logger)
         {
             _sendHeaderDetailService = sendHeaderDetailService;
-            _mapper = mapper;
-            _logger = logger;
         }
 
         /// <summary>
@@ -35,7 +31,7 @@ namespace Global.Email.Api.Controllers
         /// <param name="emailRequest"></param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(SendHeaderDetailResponse))]
+        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(IGlobalResponse))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Post([FromBody] SendHeaderDetailRequest emailRequest)
@@ -44,8 +40,7 @@ namespace Global.Email.Api.Controllers
             {   
                 var email = _mapper.Map<SendHeaderDetail>(emailRequest);
                 var result = await _sendHeaderDetailService.Add(email);
-                var emailResponse = _mapper.Map<SendHeaderDetailResponse>(emailRequest);
-                return StatusCode(result, emailResponse);
+                return StatusCode(result.Status, result);
             }
             catch (Exception ex)
             {

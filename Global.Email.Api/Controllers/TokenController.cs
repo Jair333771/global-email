@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,26 +15,29 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Global.Email.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TokenController : ControllerBase
+    public class TokenController : BaseController
     {
-        private readonly ILogger<TokenController> _logger;
         private readonly IConfiguration _configuration;
         protected readonly INetCoreUserService<NetCoreUser> _userService;
         protected readonly IPasswordService _passwordService;
-        protected readonly IMapper _mapper;
 
-        public TokenController(IConfiguration configuration, IPasswordService passwordService, INetCoreUserService<NetCoreUser> userService, IMapper mapper, ILogger<TokenController> logger)
+        public TokenController(IConfiguration configuration, IPasswordService passwordService, INetCoreUserService<NetCoreUser> userService, IMapper mapper, ILogger<BaseController> logger)
+        : base(mapper, logger)
         {
             _configuration = configuration;
             _passwordService = passwordService;
             _userService = userService;
-            _mapper = mapper;
-            _logger = logger;
         }
 
+        /// <summary>
+        /// Generate token for consuming api
+        /// </summary>
+        /// <param name="userLogin"></param>
+        /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(string))]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Authentication([FromBody] UserLoginRequest userLogin)
         {
             try

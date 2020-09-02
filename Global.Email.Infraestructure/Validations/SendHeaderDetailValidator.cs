@@ -16,8 +16,7 @@ namespace Global.Email.Infraestructure.Validations
                 .NotNull().WithMessage("El api id es requerido.");
 
             RuleFor(X => X.FromEmail)
-                .Matches(EmailRegex)
-                .WithMessage("El correo remitente no es válido.")
+                .Matches(EmailRegex).WithMessage("El correo remitente no es válido.")
                 .EmailAddress().WithMessage("El remitente no es válido.")
                 .NotNull().WithMessage("El remitente del correo es requerido.")
                 .NotEmpty().WithMessage("El remitente del correo no puede estar vacio.");
