@@ -1,4 +1,4 @@
-﻿using Global.Email.Domain.Enumerations;
+﻿using Global.Email.Application.Enumerations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 

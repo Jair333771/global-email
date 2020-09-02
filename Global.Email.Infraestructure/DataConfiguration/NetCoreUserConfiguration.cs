@@ -1,12 +1,12 @@
-﻿using Global.Email.Domain.Entities;
-using Global.Email.Domain.Enumerations;
+﻿using Global.Email.Application.Enumerations;
+using Global.Email.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 
 namespace Global.Email.Infraestructure.DataConfiguration
 {
-    class NetCoreConfiguration : IEntityTypeConfiguration<NetCoreUser>
+    class NetCoreUserConfiguration : IEntityTypeConfiguration<NetCoreUser>
     {
         public void Configure(EntityTypeBuilder<NetCoreUser> builder)
         {
