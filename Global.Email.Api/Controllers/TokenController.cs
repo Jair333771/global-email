@@ -38,7 +38,7 @@ namespace Global.Email.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(string))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Authentication([FromBody] UserLoginRequest userLogin)
+        public async Task<IActionResult> Authentication([FromBody] NetCoreUserRequest userLogin)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace Global.Email.Api.Controllers
             }
         }
 
-        private async Task<(bool, NetCoreUser)> CheckDataUser(UserLoginRequest request)
+        private async Task<(bool, NetCoreUser)> CheckDataUser(NetCoreUserRequest request)
         {
             try
             {

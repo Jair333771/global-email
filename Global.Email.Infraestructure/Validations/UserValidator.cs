@@ -3,7 +3,7 @@ using Global.Email.Application.RequestModel;
 
 namespace Global.Email.Infraestructure.Validations
 {
-    class UserValidator : BaseValidator<UserLoginRequest>
+    class UserValidator : BaseValidator<NetCoreUserRequest>
     {
         public UserValidator()
         {

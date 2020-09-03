@@ -19,8 +19,8 @@ namespace Global.Email.Infraestructure.Mappings
 
         public void User()
         {
-            CreateMap<UserLoginRequest, NetCoreUser>();
-            CreateMap<NetCoreUser, UserLoginRequest>();
+            CreateMap<NetCoreUserRequest, NetCoreUser>();
+            CreateMap<NetCoreUser, NetCoreUserRequest>();
 
             CreateMap<NetCoreUserDto, NetCoreUser>();
             CreateMap<NetCoreUser, NetCoreUserDto>();
