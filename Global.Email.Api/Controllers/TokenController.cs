@@ -42,7 +42,7 @@ namespace Global.Email.Api.Controllers
         {
             try
             {
-                var result = await CheckDataUser(userLogin);
+                var result = await GetUser(userLogin);
 
                 if (!result.Item1)
                     return BadRequest();
@@ -57,7 +57,7 @@ namespace Global.Email.Api.Controllers
             }
         }
 
-        private async Task<(bool, NetCoreUser)> CheckDataUser(NetCoreUserRequest request)
+        private async Task<(bool, NetCoreUser)> GetUser(NetCoreUserRequest request)
         {
             try
             {

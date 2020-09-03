@@ -11,13 +11,14 @@ namespace Global.Email.Infraestructure.Mappings
     {
         public AutomapperEmail()
         {
-            User();
+            NetCoreUser();
             Email();
             SendHeader();
             SendHeaderDetail();
+            MassiveDetailShipping();
         }
 
-        public void User()
+        public void NetCoreUser()
         {
             CreateMap<NetCoreUserRequest, NetCoreUser>();
             CreateMap<NetCoreUser, NetCoreUserRequest>();
@@ -63,6 +64,17 @@ namespace Global.Email.Infraestructure.Mappings
 
             CreateMap<SendHeaderDetailRequest, SendHeaderDetailResponse>();
             CreateMap<SendHeaderDetailResponse, SendHeaderDetailRequest>();
+        }
+        public void MassiveDetailShipping()
+        {
+            CreateMap<MassiveDetailShipping, MassiveDetailShippingDto>();
+            CreateMap<MassiveDetailShippingDto, MassiveDetailShipping>();
+
+            CreateMap<MassiveDetailShipping, MassiveDetailShippingRequest>();
+            CreateMap<MassiveDetailShippingRequest, MassiveDetailShipping>();
+
+            CreateMap<MassiveDetailShipping, MassiveDetailShippingResponse>();
+            CreateMap<MassiveDetailShippingResponse, MassiveDetailShipping>();
         }
     }
 }

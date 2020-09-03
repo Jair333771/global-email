@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,18 +59,35 @@ namespace Global.Email.Infraestructure.Extensions
 
                 doc.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 
-                var assembly = GetAssemblyByName("Global.Email.Api");
+                var assembly = AppDomain.CurrentDomain.GetAssemblies().
+                   FirstOrDefault(assembly => assembly.GetName().Name == "Global.Email.Api");
                 var xmlFile = $"{assembly.GetName().Name}.xml";
                 var xmlRoute = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
                 doc.IncludeXmlComments(xmlRoute);
             });
             return services;
         }
 
-        public static Assembly GetAssemblyByName(string name)
+        public static IServiceCollection AddFunctions(this IServiceCollection services)
         {
-            return AppDomain.CurrentDomain.GetAssemblies().
-                   FirstOrDefault(assembly => assembly.GetName().Name == name);
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddControllers()
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+                    opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                })
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+                });
+
+            services.AddMvc();
+
+            return services;
         }
 
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
@@ -81,10 +99,13 @@ namespace Global.Email.Infraestructure.Extensions
             services.AddTransient<IGlobalResponse, GlobalResponse>();
             services.AddTransient<IErrorResponses, ErrorListResponse>();
 
-            services.AddTransient<ISendHeaderDetailService<SendHeaderDetail>, SendHeaderDetailService>();
-            services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();
+            services.AddTransient<IBaseService<MassiveDetailShipping>, MassiveDetailShippingService>();
+            services.AddTransient<IBaseService<SendHeaderDetail>, SendHeaderDetailService>();
+            services.AddTransient<IBaseService<SendHeader>, SendHeaderService>();
             services.AddTransient<INetCoreUserService<NetCoreUser>, NetCoreUserService>();
+
             services.AddTransient<IPasswordService, PasswordService>();
+
             services.AddTransient<IEmailService, EmailService>();
 
             services.AddSingleton<IMandrillApi>(provider =>
@@ -100,17 +121,6 @@ namespace Global.Email.Infraestructure.Extensions
             {
                 return new SendMessageRequest(new EmailMessage());
             });
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services
-                .AddControllers()
-                .AddFluentValidation(options =>
-                {
-                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-                });
-
-            services.AddMvc();
 
             return services;
         }

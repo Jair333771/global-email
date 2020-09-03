@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Services
 {
-    public class SendHeaderService : BaseService, ISendHeaderService<SendHeader> 
+    public class SendHeaderService : BaseService, IBaseService<SendHeader> 
     {
         public SendHeaderService(IUnitOfWork unitOfWork, IGlobalResponse globalResponse, IErrorResponses errorResponse, IMapper  mapper)
         : base (unitOfWork, globalResponse, errorResponse, mapper)

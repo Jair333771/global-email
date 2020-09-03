@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Net;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using AutoMapper;
 using Global.Email.Application.Interface;
 using Global.Email.Application.RequestModel;
-using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,18 +13,18 @@ using Microsoft.Extensions.Logging;
 namespace Global.Email.Api.Controllers
 {
     [Authorize]
-    public class SendHeaderDetailController : BaseController
+    public class MassiveDetailShippingController : BaseController
     {
-        protected readonly IBaseService<SendHeaderDetail> _sendHeaderDetailService;
+        protected readonly IBaseService<MassiveDetailShipping> _massiveDetailShippingService;
 
-        public SendHeaderDetailController(IBaseService<SendHeaderDetail> sendHeaderDetailService, IMapper mapper, ILogger<BaseController> logger)
+        public MassiveDetailShippingController(IBaseService<MassiveDetailShipping> massiveDetailShippingService, IMapper mapper, ILogger<BaseController> logger)
         : base(mapper, logger)
         {
-            _sendHeaderDetailService = sendHeaderDetailService;
+            _massiveDetailShippingService = massiveDetailShippingService;
         }
 
         /// <summary>
-        /// Save Send Header Detail
+        /// Save Massive Detail Shipping
         /// </summary>
         /// <param name="emailRequest"></param>
         /// <returns></returns>
@@ -34,12 +32,12 @@ namespace Global.Email.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(IGlobalResponse))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Post([FromBody] SendHeaderDetailRequest emailRequest)
+        public async Task<IActionResult> Post([FromBody] MassiveDetailShippingRequest emailRequest)
         {
             try
-            {   
-                var email = _mapper.Map<SendHeaderDetail>(emailRequest);
-                var result = await _sendHeaderDetailService.Add(email);
+            {
+                var email = _mapper.Map<MassiveDetailShipping>(emailRequest);
+                var result = await _massiveDetailShippingService.Add(email);
                 return StatusCode(result.Status, result);
             }
             catch (Exception ex)
@@ -49,4 +47,4 @@ namespace Global.Email.Api.Controllers
             }
         }
     }
-}   
+}

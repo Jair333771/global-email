@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Global.Email.Application.Interface;
 using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Interfaces.Services
 {
     public interface IBaseService<T> where T : class
     {
-        IEnumerable<T> GetAll();
-        Task<T> GetById(int id);
-        Task<int> Add(T entity);
-        int Update(T entity);
-        Task Delete(int id);
+        IGlobalResponse GetAll();
+        Task<IGlobalResponse> GetById(int id);
+        Task<IGlobalResponse> Add(T entity);
+        Task<IGlobalResponse> Update(T entity);
+        Task<IGlobalResponse> Delete(int id);
     }
 }

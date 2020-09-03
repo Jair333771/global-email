@@ -18,9 +18,9 @@ namespace Global.Email.Api.Controllers
     [Authorize]
     public class SendHeaderController : BaseController
     {
-        protected readonly ISendHeaderService<SendHeader> _sendHeaderService;
+        protected readonly IBaseService<SendHeader> _sendHeaderService;
 
-        public SendHeaderController(ISendHeaderService<SendHeader> sendHeaderService, IMapper mapper, ILogger<BaseController> logger)
+        public SendHeaderController(IBaseService<SendHeader> sendHeaderService, IMapper mapper, ILogger<BaseController> logger)
         : base(mapper, logger)
         {
             _sendHeaderService = sendHeaderService;

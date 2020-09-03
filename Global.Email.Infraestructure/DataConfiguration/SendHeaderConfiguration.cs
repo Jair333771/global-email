@@ -17,8 +17,8 @@ namespace Global.Email.Infraestructure.DataConfiguration
                 .HasColumnName("application_id");
 
             builder.Property(e => e.SubApplicationId)
-                .IsRequired()
-               .HasColumnName("sub_application_id");
+               .HasColumnName("sub_application_id")
+                .IsRequired();
 
             builder.Property(e => e.ByName)
                .HasColumnName("by_name")

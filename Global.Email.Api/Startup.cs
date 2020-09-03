@@ -24,6 +24,7 @@ namespace Global.Email.Api
             services.AddOptions(Configuration);
             services.AddServices(Configuration);
             services.AddJwt(Configuration);
+            services.AddFunctions();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
