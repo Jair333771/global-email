@@ -12,18 +12,13 @@ using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Services
 {
-    public class NetCoreUserService : INetCoreUserService<NetCoreUser>
+    public class NetCoreUserService : BaseService ,INetCoreUserService<NetCoreUser>
     {
         private readonly IUserRepository _userRepo;
-        private readonly IUnitOfWork _unitOfWork;
-        protected readonly IGlobalResponse _globalResponse;
-        protected readonly IMapper _mapper;
 
-        public NetCoreUserService(IUnitOfWork unitOfWork, IGlobalResponse globalResponse, IMapper mapper, IUserRepository userRepo)
+        public NetCoreUserService(IUserRepository userRepo, IUnitOfWork unitOfWork, IGlobalResponse globalResponse, IErrorResponses errorResponse, IMapper mapper)
+        : base(unitOfWork, globalResponse, errorResponse, mapper)
         {
-            _unitOfWork = unitOfWork;
-            _globalResponse = globalResponse;
-            _mapper = mapper;
             _userRepo = userRepo;
         }
 
@@ -41,7 +36,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -60,7 +55,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 404;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -79,7 +74,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 204;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -98,7 +93,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 204;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -124,7 +119,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
             }
 
             return _globalResponse;

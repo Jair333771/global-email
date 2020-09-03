@@ -6,7 +6,7 @@ namespace Global.Email.Application.Interface
     public interface IGlobalResponse
     {
         object Data { get; set; }
-        List<ErrorResponse> Errors { get; set; }
+        ErrorResponse Error { get; set; }
         int Status { get; set; }
     }
 }

@@ -56,6 +56,8 @@ namespace Global.Email.Infraestructure.Extensions
                     Description = "Email Transactions Microservice"
                 });
 
+                doc.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
                 var assembly = GetAssemblyByName("Global.Email.Api");
                 var xmlFile = $"{assembly.GetName().Name}.xml";
                 var xmlRoute = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -77,6 +79,7 @@ namespace Global.Email.Infraestructure.Extensions
             services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddTransient<IGlobalResponse, GlobalResponse>();
+            services.AddTransient<IErrorResponses, ErrorListResponse>();
 
             services.AddTransient<ISendHeaderDetailService<SendHeaderDetail>, SendHeaderDetailService>();
             services.AddTransient<ISendHeaderService<SendHeader>, SendHeaderService>();

@@ -2,7 +2,6 @@
 using Global.Email.Application.DTOs;
 using Global.Email.Application.Enumerations;
 using Global.Email.Application.Interface;
-using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Services;
 using Global.Email.Domain.Interfaces.UnitOfWork;
@@ -12,18 +11,11 @@ using System.Threading.Tasks;
 
 namespace Global.Email.Domain.Services
 {
-    public class SendHeaderDetailService : ISendHeaderDetailService<SendHeaderDetail>
+    public class SendHeaderDetailService : BaseService, ISendHeaderDetailService<SendHeaderDetail>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        protected readonly IGlobalResponse _globalResponse;
-        protected readonly IMapper _mapper;
-
-        public SendHeaderDetailService(IUnitOfWork unitOfWork, IGlobalResponse globalResponse, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _globalResponse = globalResponse;
-            _mapper = mapper;
-        }
+        public SendHeaderDetailService(IUnitOfWork unitOfWork, IGlobalResponse globalResponse, IErrorResponses errorResponse, IMapper mapper)
+               : base(unitOfWork, globalResponse, errorResponse, mapper)
+        { }
 
         public async Task<IGlobalResponse> Add(SendHeaderDetail entity)
         {
@@ -32,7 +24,7 @@ namespace Global.Email.Domain.Services
             if (sendHeader == null)
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NotFound).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NotFound).FirstOrDefault();
                 return _globalResponse;
             }
 
@@ -48,7 +40,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -67,7 +59,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 404;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -86,7 +78,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 204;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -105,7 +97,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 204;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -125,7 +117,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
             }
 
             return _globalResponse;
