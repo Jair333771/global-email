@@ -34,7 +34,7 @@ namespace Global.Email.Domain.Services
         {
             try
             {
-                _emailAddress.Email = email.To;
+                _emailAddress.Email = email.ToEmail;
                 _emailAddress.Name = "User Name";
                 _emailAddress.Type = "to";
 
@@ -42,7 +42,7 @@ namespace Global.Email.Domain.Services
                 _listEmailAdress.Add(_emailAddress);
 
                 _emailMessage.To = _listEmailAdress;
-                _emailMessage.Text = email.Message;
+                _emailMessage.Text = email.DescMessage;
 
                 _sendMessageRequest.Message = _emailMessage;
 

@@ -5,6 +5,7 @@ using AutoMapper;
 using Global.Email.Application.DTOs;
 using Global.Email.Application.Enumerations;
 using Global.Email.Application.Interface;
+using Global.Email.Application.RequestModel;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +36,7 @@ namespace Global.Email.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(IGlobalResponse))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Post(NetCoreUserDto request)
+        public async Task<IActionResult> Post([FromBody] NetCoreUserRequest request)
         {
             try
             {

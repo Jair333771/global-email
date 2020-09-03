@@ -3,9 +3,9 @@ using Global.Email.Application.RequestModel;
 
 namespace Global.Email.Infraestructure.Validations
 {
-    class UserValidator : BaseValidator<NetCoreUserRequest>
+    class NetCoreUserValidator : BaseValidator<NetCoreUserRequest>
     {
-        public UserValidator()
+        public NetCoreUserValidator()
         {
             RuleFor(x => x.User)
                 .NotNull().WithMessage("El nombre requerido.")
@@ -14,6 +14,10 @@ namespace Global.Email.Infraestructure.Validations
             RuleFor(x => x.Password)
                 .NotNull().WithMessage("La contraseña requerida.")
                 .NotEmpty().WithMessage("La contraseña requerida.");
+
+            RuleFor(x => x.Role)
+                .NotNull().WithMessage("El rol requerido.")
+                .NotEmpty().WithMessage("El rol requerido.");
         }
     }
 }

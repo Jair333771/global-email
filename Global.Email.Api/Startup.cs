@@ -20,10 +20,15 @@ namespace Global.Email.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContexts(Configuration);
+
             services.AddSwaggerDoc();
+
             services.AddOptions(Configuration);
+
             services.AddServices(Configuration);
+
             services.AddJwt(Configuration);
+
             services.AddFunctions();
         }
 

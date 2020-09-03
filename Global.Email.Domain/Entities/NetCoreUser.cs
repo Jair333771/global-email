@@ -13,6 +13,7 @@ namespace Global.Email.Domain.Entities
         public string UserName { get; set; }
         [Column("password")]
         public string Password { get; set; }
+        [Column("role")]
         public RoleType? Role { get; set; }
     }
 }
