@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Global.Email.Application.DTOs;
+using Global.Email.Application.Enumerations;
 using Global.Email.Application.Interface;
 using Global.Email.Application.ResponseModel;
 using Global.Email.Domain.Entities;
@@ -31,7 +32,7 @@ namespace Global.Email.Domain.Services
             if (sendHeader == null)
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Data = "La plantilla no ha sido encontrada.";
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NotFound).FirstOrDefault();
                 return _globalResponse;
             }
 
@@ -47,7 +48,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Data = "El registro no ha sido creado, por favor verifica la información";
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -66,8 +67,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 404;
-                _globalResponse.Data = "El registro no ha sido eliminado, por favor verifica la información";
-                return _globalResponse;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -84,7 +84,10 @@ namespace Global.Email.Domain.Services
                 _globalResponse.Data = model;
             }
             else
+            {
                 _globalResponse.Status = 204;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+            }
 
             return _globalResponse;
         }
@@ -100,7 +103,10 @@ namespace Global.Email.Domain.Services
                 _globalResponse.Data = model;
             }
             else
+            {
                 _globalResponse.Status = 204;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+            }
 
             return _globalResponse;
         }
@@ -117,7 +123,10 @@ namespace Global.Email.Domain.Services
                 _globalResponse.Data = model;
             }
             else
+            {
                 _globalResponse.Status = 400;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
+            }
 
             return _globalResponse;
         }

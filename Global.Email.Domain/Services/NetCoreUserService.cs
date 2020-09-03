@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Global.Email.Application.DTOs;
+using Global.Email.Application.Enumerations;
 using Global.Email.Application.Interface;
 using Global.Email.Domain.Entities;
 using Global.Email.Domain.Interfaces.Repositories;
@@ -40,7 +41,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 400;
-                _globalResponse.Data = "El registro no ha sido creado, por favor verifica la información";
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -59,8 +60,7 @@ namespace Global.Email.Domain.Services
             else
             {
                 _globalResponse.Status = 404;
-                _globalResponse.Data = "El registro no ha sido eliminado, por favor verifica la información";
-                return _globalResponse;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
             }
 
             return _globalResponse;
@@ -77,7 +77,10 @@ namespace Global.Email.Domain.Services
                 _globalResponse.Data = model;
             }
             else
+            {
                 _globalResponse.Status = 204;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+            }
 
             return _globalResponse;
         }
@@ -93,7 +96,10 @@ namespace Global.Email.Domain.Services
                 _globalResponse.Data = model;
             }
             else
+            {
                 _globalResponse.Status = 204;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
+            }
 
             return _globalResponse;
         }
@@ -116,7 +122,10 @@ namespace Global.Email.Domain.Services
                 _globalResponse.Data = model;
             }
             else
+            {
                 _globalResponse.Status = 400;
+                _globalResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
+            }
 
             return _globalResponse;
         }
