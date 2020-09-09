@@ -21,19 +21,7 @@ namespace Global.Email.Domain.Services
         {
             await _unitOfWork.GetRepository<MassiveDetailShipping>().Add(entity);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                var model = _mapper.Map<MassiveDetailShippingDto>(entity);
-                _globalResponse.Status = 201;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
-            }
-
+            SetGlobalResponse<MassiveDetailShipping, MassiveDetailShippingDto>(result, entity, CustomErrorType.Created, 201, 400);
             return _globalResponse;
         }
 
@@ -41,56 +29,21 @@ namespace Global.Email.Domain.Services
         {
             await _unitOfWork.GetRepository<MassiveDetailShipping>().Delete(id);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                _globalResponse.Status = 200;
-                _globalResponse.Data = "Registro eliminado exitosamente.";
-            }
-            else
-            {
-                _globalResponse.Status = 404;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
-            }
-
+            SetGlobalResponse<string, string>(result, "Registro eliminado exitosamente.", CustomErrorType.Deleted);
             return _globalResponse;
         }
 
         public IGlobalResponse GetAll()
         {
             var result = _unitOfWork.GetRepository<MassiveDetailShipping>().GetAll();
-
-            if (result.Count() > 0)
-            {
-                var model = _mapper.Map<IEnumerable<MassiveDetailShippingDto>>(result);
-                _globalResponse.Status = 201;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 204;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
-            }
-
+            SetGlobalResponse<IEnumerable<MassiveDetailShipping>, IEnumerable<MassiveDetailShippingDto>>(result.Count(), result, CustomErrorType.NoContent, 200, 204);
             return _globalResponse;
         }
 
         public async Task<IGlobalResponse> GetById(int id)
         {
             var result = await _unitOfWork.GetRepository<MassiveDetailShipping>().GetById(id);
-
-            if (result != null)
-            {
-                var model = _mapper.Map<MassiveDetailShippingDto>(result);
-                _globalResponse.Status = 200;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 204;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
-            }
-
+            SetGlobalResponse<MassiveDetailShipping, MassiveDetailShippingDto>(1, result, CustomErrorType.NotFound);
             return _globalResponse;
         }
 
@@ -98,19 +51,7 @@ namespace Global.Email.Domain.Services
         {
             _unitOfWork.GetRepository<MassiveDetailShipping>().Update(entity);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                var model = _mapper.Map<MassiveDetailShippingDto>(result);
-                _globalResponse.Status = 200;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
-            }
-
+            SetGlobalResponse<MassiveDetailShipping, MassiveDetailShippingDto>(result, entity, CustomErrorType.Updated);
             return _globalResponse;
         }
     }

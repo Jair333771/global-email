@@ -26,19 +26,7 @@ namespace Global.Email.Domain.Services
         {
             await _unitOfWork.GetRepository<NetCoreUser>().Add(entity);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                var model = _mapper.Map<NetCoreUserDto>(entity);
-                _globalResponse.Status = 201;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
-            }
-
+            SetGlobalResponse<NetCoreUser, NetCoreUserDto>(result, entity, CustomErrorType.Created, 201, 400);
             return _globalResponse;
         }
 
@@ -46,62 +34,28 @@ namespace Global.Email.Domain.Services
         {
             await _unitOfWork.GetRepository<NetCoreUser>().Delete(id);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                _globalResponse.Status = 200;
-                _globalResponse.Data = "Registro eliminado exitosamente.";
-            }
-            else
-            {
-                _globalResponse.Status = 404;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
-            }
-
+            SetGlobalResponse<string, string>(result, "Registro eliminado exitosamente.", CustomErrorType.Deleted);
             return _globalResponse;
         }
 
         public IGlobalResponse GetAll()
         {
             var result = _unitOfWork.GetRepository<NetCoreUser>().GetAll();
-
-            if (result.Count() > 0)
-            {
-                var model = _mapper.Map<IEnumerable<NetCoreUserDto>>(result);
-                _globalResponse.Status = 201;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 204;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
-            }
-
+            SetGlobalResponse<IEnumerable<NetCoreUser>, IEnumerable<NetCoreUserDto>>(result.Count(), result, CustomErrorType.NoContent, 200, 204);
             return _globalResponse;
         }
 
         public async Task<IGlobalResponse> GetById(int id)
         {
             var result = await _unitOfWork.GetRepository<NetCoreUser>().GetById(id);
-
-            if (result != null)
-            {
-                var model = _mapper.Map<NetCoreUserDto>(result);
-                _globalResponse.Status = 200;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 204;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
-            }
-
+            SetGlobalResponse<NetCoreUser, NetCoreUserDto>(1, result, CustomErrorType.NotFound);
             return _globalResponse;
         }
 
         public async Task<(bool, NetCoreUser)> GetByUser(NetCoreUser entity)
         {
             var result = await _userRepo.GetByUser(entity.User);
+            SetGlobalResponse<NetCoreUser, NetCoreUserDto>(1, result, CustomErrorType.NotFound);
             return (result != null, result);
         }
 
@@ -109,19 +63,7 @@ namespace Global.Email.Domain.Services
         {
             _unitOfWork.GetRepository<NetCoreUser>().Update(entity);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                var model = _mapper.Map<NetCoreUserDto>(result);
-                _globalResponse.Status = 200;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
-            }
-
+            SetGlobalResponse<NetCoreUser, NetCoreUserDto>(result, entity, CustomErrorType.Updated);
             return _globalResponse;
         }
     }

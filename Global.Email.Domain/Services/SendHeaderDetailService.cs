@@ -19,30 +19,12 @@ namespace Global.Email.Domain.Services
 
         public async Task<IGlobalResponse> Add(SendHeaderDetail entity)
         {
-            var sendHeader = await _unitOfWork.GetRepository<SendHeader>().GetById(entity.SendHeaderId.GetValueOrDefault());
-
-            if (sendHeader == null)
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NotFound).FirstOrDefault();
+            if(!(await ValidateHeader(entity.SendHeaderId.GetValueOrDefault())))
                 return _globalResponse;
-            }
 
             await _unitOfWork.GetRepository<SendHeaderDetail>().Add(entity);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                var model = _mapper.Map<SendHeaderDetailDto>(entity);
-                _globalResponse.Status = 201;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Created).FirstOrDefault();
-            }
-
+            SetGlobalResponse<SendHeaderDetail, SendHeaderDetailDto>(result, entity, CustomErrorType.Created, 201, 400);
             return _globalResponse;
         }
 
@@ -50,56 +32,21 @@ namespace Global.Email.Domain.Services
         {
             await _unitOfWork.GetRepository<SendHeaderDetail>().Delete(id);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                _globalResponse.Status = 200;
-                _globalResponse.Data = "Registro eliminado exitosamente.";
-            }
-            else
-            {
-                _globalResponse.Status = 404;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Deleted).FirstOrDefault();
-            }
-
+            SetGlobalResponse<string, string>(result, "Registro eliminado exitosamente.", CustomErrorType.Deleted);
             return _globalResponse;
         }
 
         public IGlobalResponse GetAll()
         {
             var result = _unitOfWork.GetRepository<SendHeaderDetail>().GetAll();
-
-            if (result.Count() > 0)
-            {
-                var model = _mapper.Map<IEnumerable<SendHeaderDetailDto>>(result);
-                _globalResponse.Status = 201;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 204;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
-            }
-
+            SetGlobalResponse<IEnumerable<SendHeaderDetail>, IEnumerable<SendHeaderDetailDto>>(result.Count(), result, CustomErrorType.NoContent, 200, 204);
             return _globalResponse;
         }
 
         public async Task<IGlobalResponse> GetById(int id)
         {
             var result = await _unitOfWork.GetRepository<SendHeaderDetail>().GetById(id);
-
-            if (result != null)
-            {
-                var model = _mapper.Map<SendHeaderDetailDto>(result);
-                _globalResponse.Status = 200;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 204;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NoContent).FirstOrDefault();
-            }
-
+            SetGlobalResponse<SendHeaderDetail, SendHeaderDetailDto>(1, result, CustomErrorType.NotFound);
             return _globalResponse;
         }
 
@@ -107,20 +54,24 @@ namespace Global.Email.Domain.Services
         {
             _unitOfWork.GetRepository<SendHeaderDetail>().Update(entity);
             var result = await _unitOfWork.SaveChangesAsync();
-
-            if (result > 0)
-            {
-                var model = _mapper.Map<SendHeaderDetailDto>(result);
-                _globalResponse.Status = 200;
-                _globalResponse.Data = model;
-            }
-            else
-            {
-                _globalResponse.Status = 400;
-                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.Updated).FirstOrDefault();
-            }
-
+            SetGlobalResponse<SendHeaderDetail, SendHeaderDetailDto>(result, entity, CustomErrorType.Updated);
             return _globalResponse;
         }
+
+        #region Validations
+        public async Task<bool> ValidateHeader(int id)
+        {
+            var sendHeader = await _unitOfWork.GetRepository<SendHeader>().GetById(id);
+
+            if (sendHeader == null)
+            {
+                _globalResponse.Status = 400;
+                _globalResponse.Data = "El sendHeaderId enviado ha sido eliminado o no existe.";
+                _globalResponse.Error = _errorResponse.Errors.Where(x => x.Type == CustomErrorType.NotFound).FirstOrDefault();
+                return false;
+            }
+            return true;
+        }
+        #endregion
     }
 }

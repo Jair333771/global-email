@@ -48,7 +48,7 @@ namespace Global.Email.Api.Controllers
                     return BadRequest();
 
                 var token = GenerateToken(result.Item2);
-                return Ok(new { token });
+                return Ok(new { AccessToken = token });
             }
             catch (Exception ex)
             {

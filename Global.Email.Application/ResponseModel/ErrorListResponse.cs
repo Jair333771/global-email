@@ -1,8 +1,6 @@
 ﻿using Global.Email.Application.Enumerations;
 using Global.Email.Application.Interface;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Global.Email.Application.ResponseModel
 {
@@ -13,7 +11,7 @@ namespace Global.Email.Application.ResponseModel
             new ErrorResponse
             {
                 Type = CustomErrorType.Created,
-                Message = "El registro no ha sido creado, por favor verifica la información"
+                Message = "El registro no ha sido agregado, por favor verifica la información"
             },
             new ErrorResponse
             {
@@ -33,7 +31,7 @@ namespace Global.Email.Application.ResponseModel
             new ErrorResponse
             {
                 Type = CustomErrorType.NotFound,
-                Message = "El registro no existe o ha sido eliminado, por favor verifica la información."
+                Message = "El sistema no pudo encontrar el contenido solicitado, por favor verifica la información."
             },
             new ErrorResponse
             {
@@ -43,7 +41,7 @@ namespace Global.Email.Application.ResponseModel
             new ErrorResponse
             {
                 Type = CustomErrorType.BadRequest,
-                Message = "Ha ocurrido un error al procesar tu solicitud, por favor inténtalo nuevamente."
+                Message = "No hemos podido procesar tu solicitud, por favor inténtalo nuevamente."
             }
         };
     }
