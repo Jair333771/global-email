@@ -19,22 +19,19 @@ namespace Global.Email.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContexts(Configuration);
-
-            services.AddSwaggerDoc();
-
-            services.AddOptions(Configuration);
-
-            services.AddServices(Configuration);
-
-            services.AddJwt(Configuration);
-
-            services.AddFunctions();
+            services.AddDbContexts(Configuration)
+                .AddSwaggerDoc()
+                .AddOptions(Configuration)
+                .AddServices(Configuration)
+                .AddJwt(Configuration)
+                .AddFunctions();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var url = Configuration[WebHostDefaults.ServerUrlsKey];
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -46,8 +43,9 @@ namespace Global.Email.Api
 
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Email Transactions v1");
-                options.RoutePrefix = string.Empty;
+                options.SwaggerEndpoint("../swagger/v1/swagger.json", "Email Transactions v1");
+                //for root only path
+                //options.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
@@ -61,5 +59,6 @@ namespace Global.Email.Api
                 endpoints.MapControllers();
             });
         }
+
     }
 }

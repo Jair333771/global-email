@@ -80,7 +80,7 @@ namespace Global.Email.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(IGlobalResponse))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Post([FromBody] SendHeaderRequest emailRequest)
+        public async Task<IActionResult> Add([FromBody] SendHeaderRequest emailRequest)
         {
             try
             {
