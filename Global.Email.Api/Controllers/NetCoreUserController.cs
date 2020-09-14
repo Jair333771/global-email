@@ -36,7 +36,7 @@ namespace Global.Email.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(IGlobalResponse))]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Post([FromBody] NetCoreUserRequest request)
+        public async Task<IActionResult> Add([FromBody] NetCoreUserRequest request)
         {
             try
             {

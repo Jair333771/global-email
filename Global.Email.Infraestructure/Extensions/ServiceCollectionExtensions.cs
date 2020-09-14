@@ -46,7 +46,8 @@ namespace Global.Email.Infraestructure.Extensions
             return services;
         }
 
-        public static IServiceCollection AddSwaggerDoc(this IServiceCollection services) {
+        public static IServiceCollection AddSwaggerDoc(this IServiceCollection services)
+        {
             services.AddSwaggerGen(doc =>
             {
                 doc.SwaggerDoc("v1", new OpenApiInfo
@@ -72,17 +73,20 @@ namespace Global.Email.Infraestructure.Extensions
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers()
-                .AddNewtonsoftJson(opt =>
-                {
-                    opt.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
-                    opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                .AddFluentValidation(options =>
-                {
-                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-                });
+            services.AddControllers().AddNewtonsoftJson(opt =>
+            {
+                opt.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+                opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
+            var assembly = AppDomain.CurrentDomain.GetAssemblies()
+                  .Where(assembly => assembly.GetName().Name == "Global.Email.Api").ToList();
+
+            services.AddMvc().AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblies(assembly);
+            });
 
             services.AddMvc();
 
@@ -132,16 +136,16 @@ namespace Global.Email.Infraestructure.Extensions
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuer = true,
-                     ValidateAudience = true,
-                     ValidateLifetime = true,
-                     ValidateIssuerSigningKey = true,
-                     ValidIssuer = configuration.GetValue<string>("Authentication:Issuer"),
-                     ValidAudience = configuration.GetValue<string>("Authentication:Audience"),
-                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("Authentication:SecretKey")))
-                 };
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration.GetValue<string>("Authentication:Issuer"),
+                    ValidAudience = configuration.GetValue<string>("Authentication:Audience"),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("Authentication:SecretKey")))
+                };
 
             });
             return services;

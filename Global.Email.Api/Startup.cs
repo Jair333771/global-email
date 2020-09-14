@@ -43,9 +43,12 @@ namespace Global.Email.Api
 
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("../swagger/v1/swagger.json", "Email Transactions v1");
-                //for root only path
-                //options.RoutePrefix = string.Empty;
+                //Local iis for subsites
+                //options.SwaggerEndpoint("../swagger/v1/swagger.json", "Email Transactions v1");
+                //options.RoutePrefix = string.Empty; --comment this line on local
+
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Email Transactions v1");
+                options.RoutePrefix = string.Empty;
             });
 
             app.UseRouting();
